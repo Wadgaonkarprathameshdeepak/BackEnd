@@ -26,7 +26,16 @@ const contactFormSchema = new mongoose.Schema({
 });
 
 const ContactForm = mongoose.model('ContactForm', contactFormSchema);
-
+// get 
+app.get('/api/contact', async (req, res) => {
+  try {
+    const contacts = await ContactForm.find(); // Fetch all entries
+    res.status(200).json(contacts); // Send them as a JSON response
+  } catch (error) {
+    console.error('Error fetching contact forms:', error);
+    res.status(500).json({ msg: 'Error fetching contact forms', error });
+  }
+});
 // Routes
 app.post('/api/contact', async (req, res) => {
   const { name, mobile, date, dayTime, service, message } = req.body;
