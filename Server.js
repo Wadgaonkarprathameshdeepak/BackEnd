@@ -43,7 +43,7 @@ app.get('/api/contact', async (req, res) => {
 });
 
 // Post route
-app.post('/api/contact', async (req, res) => {
+app.post('/api/submit', async (req, res) => {
   const { name, mobile, date, dayTime, service, message } = req.body;
 
   try {
