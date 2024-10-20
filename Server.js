@@ -15,7 +15,7 @@ app.use(cors());
 console.log("MongoDB URI from ENV:", process.env.REACT_APP_CHESTCLINIC);
 
 // Connect to MongoDB
-mongoose.connect(process.env.REACT_APP_CHESTCLINIC)
+mongoose.connect(process.env.CHESTCLINIC_MONGO_URI)
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 
@@ -76,5 +76,5 @@ app.post('/api/submit', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
-  console.log("MongoDB URI:", process.env.REACT_APP_CHESTCLINIC);
+  console.log("MongoDB URI:", process.env.CHESTCLINIC_MONGO_URI);
 });
