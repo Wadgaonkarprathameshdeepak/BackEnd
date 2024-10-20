@@ -11,9 +11,9 @@ const PORT = 5000;
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
-
+console.log(process.env.REACT_APP_CHESTCLINIC);
 // Connect to MongoDB
-mongoose.connect( process.env.REACT_APP_CHESTCLINI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect( process.env.REACT_APP_CHESTCLINIC, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 
