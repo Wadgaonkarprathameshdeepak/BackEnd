@@ -1,9 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
-
 
 const app = express();
 const PORT = 5000;
@@ -11,9 +10,12 @@ const PORT = 5000;
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
-console.log(process.env.REACT_APP_CHESTCLINIC);
+
+// Correctly load MongoDB URI from .env
+console.log("MongoDB URI from ENV:", process.env.REACT_APP_CHESTCLINIC);
+
 // Connect to MongoDB
-mongoose.connect( process.env.REACT_APP_CHESTCLINIC, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.REACT_APP_CHESTCLINIC)
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 
@@ -28,7 +30,8 @@ const contactFormSchema = new mongoose.Schema({
 });
 
 const ContactForm = mongoose.model('ContactForm', contactFormSchema);
-// get 
+
+// Get route
 app.get('/api/contact', async (req, res) => {
   try {
     const contacts = await ContactForm.find(); // Fetch all entries
@@ -38,26 +41,21 @@ app.get('/api/contact', async (req, res) => {
     res.status(500).json({ msg: 'Error fetching contact forms', error });
   }
 });
-// Routes
+
+// Post route
 app.post('/api/contact', async (req, res) => {
   const { name, mobile, date, dayTime, service, message } = req.body;
 
   try {
-    // Log the incoming date and time to verify
     console.log('Incoming Request:', { date, dayTime });
 
-    // Check if the date and dayTime slot is already booked by any user
     const existingAppointment = await ContactForm.findOne({ date, dayTime });
-
-    // Log the result of the database query to verify if it finds an existing appointment and if it finds
     console.log('Existing Appointment:', existingAppointment);
 
     if (existingAppointment) {
-      // If the time slot is already booked, return an error
       return res.status(400).json({ msg: 'This time slot is already booked. Please select a different time.' });
     }
 
-    // If no existing appointment, create a new one
     const newContact = new ContactForm({
       name,
       mobile,
@@ -78,6 +76,5 @@ app.post('/api/contact', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+  console.log("MongoDB URI:", process.env.REACT_APP_CHESTCLINIC);
 });
-
-
